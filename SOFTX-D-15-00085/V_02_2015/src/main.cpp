@@ -47,7 +47,7 @@ void UpdateSim()
 		/* 2. Mill Simulation */
 	    if( m_Sim_Type==ballmill )
 	    {
-	       sprintf(fps, "Rotation Time: %3.1f (s)",simtime_elapsed);
+	       snprintf(fps, sizeof(fps), "Rotation Time: %3.1f (s)",simtime_elapsed);
 
 	       /* End of a revolution */
 		   if(m_Current_StepNumber>0 && m_Current_StepNumber%m_Mill_SimData.Num_Steps_PerRev==0 )
@@ -127,7 +127,7 @@ void UpdateSim()
 	    }/* End Mill simulation info */
 	    else if(m_Sim_Type==silo)
 	    {
-	      sprintf(fps, "Elapsed Time: %3.2f (s)",simtime_elapsed);
+	      snprintf(fps, sizeof(fps), "Elapsed Time: %3.2f (s)",simtime_elapsed);
 	      //m_Current_StepNumber++;
 
 	       if(m_Silo_SimData.measure_flow && m_Silo_SimData.is_hatch_open)
@@ -165,11 +165,11 @@ void UpdateSim()
 			}
 			num_WrotSeps++;
 
-			sprintf(fps, "Rotating Time: %3.1f (s)",simtime_elapsed);
+			snprintf(fps, sizeof(fps), "Rotating Time: %3.1f (s)",simtime_elapsed);
 		}
 	    else /* Normal Simulation */
 	    {
-	    	sprintf(fps, "Elapsed Time: %3.1f (s)",simtime_elapsed);
+	    	snprintf(fps, sizeof(fps), "Elapsed Time: %3.1f (s)",simtime_elapsed);
 	    }
 
 

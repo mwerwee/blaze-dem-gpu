@@ -45,8 +45,8 @@
 
                       /* Vector types */
 #include <vector_types.h>
-#include "Utilities/Host/Functions.h"
-#include "Utilities/Host/Operators.h"
+#include "Utilities/Functions.h"
+#include "Utilities/Operators.h"
 
 
                       /* Project Includes */

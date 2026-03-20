@@ -36,11 +36,13 @@
 /*---------------------------------------------------------------------------*/
 /*                          Device includes                                  */
 /*---------------------------------------------------------------------------*/
-#include "../Utilities/Device/Opertators.cuh"
-#include "../Utilities/Device/Functions.cuh"
+#include "../Utilities/Operators.h"
+#include "../Utilities/Functions.h"
 
 
 #include "GPU_Memory_Transfer.cuh"
+
+#include "../Utilities/CudaCheck.h"
 
 #include <string>
 #include <sstream>
@@ -192,15 +194,7 @@ float Call_Time=0.0f;
 void Set_Position_DefaultGrid( InitConfig *h_PosConfig, POBJ *h_POBJ )
 {
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Initial Position Default Grid: Start "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Default Grid: Start ");
 
 	cout<<"INFO-D: Allocating Initial positions on HOST \n";
 
@@ -315,15 +309,7 @@ void Set_Position_DefaultGrid( InitConfig *h_PosConfig, POBJ *h_POBJ )
 	 cudaMalloc( (void**) &d_Particle_IDPack   , sizeof(int)*NUMPARTICLES_MAX_SIM );
 	 cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	        {
-	      	 cout<<"Initial Position Default Grid: Malloc ID "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Default Grid: Malloc ID ");
 
 
 
@@ -353,15 +339,7 @@ void Set_Position_DefaultGrid( InitConfig *h_PosConfig, POBJ *h_POBJ )
 	 }
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	        {
-	      	 cout<<"Initial Position Default Grid: Memory End "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Default Grid: Memory End ");
 
 
 
@@ -377,15 +355,7 @@ void Set_Position_DefaultGrid( InitConfig *h_PosConfig, POBJ *h_POBJ )
 	 cudaDeviceSynchronize();
 
 
-	 if(error_check==1)
-	 {
-	    cudaError_t errormsg=cudaGetLastError();
-	    if(errormsg>0)
-	    {
-	       cout<<"Initial Position Default Grid: Set Pos Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	       exit(1);
-	    }
-	 }
+	 CUDA_CHECK("Initial Position Default Grid: Set Pos Kernel ");
 
 
 
@@ -412,15 +382,7 @@ void Set_Position_DefaultGrid( InitConfig *h_PosConfig, POBJ *h_POBJ )
 
 	 cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	        {
-	    	  cout<<"Initial Position Default Grid: Free memory "<<cudaGetErrorString(errormsg)<<endl;
-	    	  exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Default Grid: Free memory ");
 
 }
 /*-----------------------------------------------------------------------------*/
@@ -447,15 +409,7 @@ void Set_Position_Random_Grid ( InitConfig *h_PosConfig, POBJ *h_POBJ )
 	h_Particle_IDPack   = new int      [NUMPARTICLES_MAX_SIM];
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Initial Position Random Grid: Start "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Random Grid: Start ");
 
 
 	cout<<"INFO-D: Creating Random Grid \n";
@@ -640,15 +594,7 @@ void Set_Position_Random_Grid ( InitConfig *h_PosConfig, POBJ *h_POBJ )
 	 cudaDeviceSynchronize();
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Initial Position Random Grid: Mem end "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Random Grid: Mem end ");
 
 
 	 Set_Pos<<< GlobalLaunch.dimGrid, GlobalLaunch.dimBlock >>>( d_posPack,
@@ -661,15 +607,7 @@ void Set_Position_Random_Grid ( InitConfig *h_PosConfig, POBJ *h_POBJ )
 	 cudaDeviceSynchronize();
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Initial Position Random Grid: Set_Pos Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Random Grid: Set_Pos Kernel ");
 
      cout<<" DONE Freeing Memory ! \n";
 
@@ -690,15 +628,7 @@ void Set_Position_Random_Grid ( InitConfig *h_PosConfig, POBJ *h_POBJ )
 	 cudaFree( d_Particle_TypePack);
 	 cudaFree( d_Particle_IDPack);
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	 cout<<"Initial Position Random Grid: Mem Free "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Random Grid: Mem Free ");
 }
 /*-----------------------------------------------------------------------------*/
 
@@ -720,15 +650,7 @@ void Set_Position_Fill_Mill (POBJ *h_POBJ,WOBJ *h_WOBJ, float vel, float3 fill_p
 	h_Particle_TypePack   = new uint      [NUMPARTICLES_MAX_SIM];
 	h_Particle_IDPack     = new int       [NUMPARTICLES_MAX_SIM];
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	  cout<<"Initial Position Fill: Start "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Fill: Start ");
 
 	cout<<"INFO-D: Creating Fill Config \n";
 
@@ -985,15 +907,7 @@ void Set_Position_Fill_Mill (POBJ *h_POBJ,WOBJ *h_WOBJ, float vel, float3 fill_p
 	 cudaDeviceSynchronize();
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Initial Position Fill: Mem End "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Fill: Mem End ");
 
 
 	 Set_Pos<<< GlobalLaunch.dimGrid, GlobalLaunch.dimBlock >>>( d_posPack,
@@ -1007,15 +921,7 @@ void Set_Position_Fill_Mill (POBJ *h_POBJ,WOBJ *h_WOBJ, float vel, float3 fill_p
 	 cudaDeviceSynchronize();
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Initial Position Fill: Set_Pos Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Fill: Set_Pos Kernel ");
 
      cout<<" DONE Freeing Memory ! \n";
 
@@ -1039,15 +945,7 @@ void Set_Position_Fill_Mill (POBJ *h_POBJ,WOBJ *h_WOBJ, float vel, float3 fill_p
 	 cudaFree( d_Particle_TypePack );
 	 cudaFree( d_Particle_IDPack );
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Initial Position Fill: Mem Free "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Initial Position Fill: Mem Free ");
 }
 /*-----------------------------------------------------------------------------*/
 
@@ -1058,15 +956,7 @@ void Fill_State()
 	int num_particle = min(pack_size.x*pack_size.z,num_rem);
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<" Fill State: Start "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK(" Fill State: Start ");
 
 
 
@@ -1099,15 +989,7 @@ void Fill_State()
     Fill_Mill<<<GlobalLaunch.dimGrid, GlobalLaunch.dimBlock >>>(pack_pos.y,dram_position_com);
 	cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Fill State: Fill_Mill Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Fill State: Fill_Mill Kernel ");
 
 }
 
@@ -1147,15 +1029,7 @@ void Device_Set_Pos( float3 *h_pos,  Quaterion *h_Ornt,
     cudaMemcpy(d_pid,   h_pid,  sizeof(int)*NUMPARTICLES_MAX_SIM,  cudaMemcpyHostToDevice );
     cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set Position: Mem  End "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Set Position: Mem  End ");
 
 
 
@@ -1165,15 +1039,7 @@ void Device_Set_Pos( float3 *h_pos,  Quaterion *h_Ornt,
     		                                                     dram_ObjectType, dram_P_ID   );
 	cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set Position: Set_Pos Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Set Position: Set_Pos Kernel ");
 
 
 	cudaFree(d_pos);
@@ -1185,15 +1051,7 @@ void Device_Set_Pos( float3 *h_pos,  Quaterion *h_Ornt,
 	cudaFree(d_ptype);
 	cudaFree(d_pid);
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set Position: Mem Free "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Set Position: Mem Free ");
 
 
 	LogFileD<<" DONE Freeing Memory ! \n";
@@ -1213,15 +1071,7 @@ void Device_Set_Pos_Velocity( float3 *h_pos, Quaterion *h_Ornt, float3 *h_vel,
     LogFileD<<"INFO-D: Allocating File Positions on Device: ";
 
 
-	if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set Position Velocity: Start "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	CUDA_CHECK("Set Position Velocity: Start ");
 
 
 	float3    *d_pos;
@@ -1269,15 +1119,7 @@ void Device_Set_Pos_Velocity( float3 *h_pos, Quaterion *h_Ornt, float3 *h_vel,
     		                                                         dram_velocity_com, dram_velocity_ang, dram_ObjectType, dram_P_ID   );
 	cudaDeviceSynchronize();
 
-	if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set Position Velocity: Set_Pos_Vel Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	CUDA_CHECK("Set Position Velocity: Set_Pos_Vel Kernel ");
 
 
 
@@ -1337,15 +1179,7 @@ void Device_Set_System_State( float3    *h_pos,
 	cudaMalloc( (void**) &d_pid   , sizeof(int)     *NUMPARTICLES_MAX_SIM );
 	cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set System State: Start "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Set System State: Start ");
 
 
 	cout<<" DONE! \n";
@@ -1380,15 +1214,7 @@ void Device_Set_System_State( float3    *h_pos,
 	cudaDeviceSynchronize();
 
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set System State: Set_PSystem_State Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Set System State: Set_PSystem_State Kernel ");
 
 	 /* If we using Classic Verlet then old position is needed */
      if(SimInfo_C->Integration_Type==1)
@@ -1413,15 +1239,7 @@ void Device_Set_System_State( float3    *h_pos,
 
 	 cout<<" DONE Freeing Memory ! \n";
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set System State: End MemFree "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Set System State: End MemFree ");
 
 }
 /*-----------------------------------------------------------------------------*/
@@ -1438,15 +1256,7 @@ void Device_Set_Tallys(float *h_Tallys)
 	 Set_Tallys<<< 1,1 >>>(d_Tallys);
 	 cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"Set Tallies: Set_Tallys Kernel "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("Set Tallies: Set_Tallys Kernel ");
 
 
 	 cudaFree(d_Tallys);
@@ -1661,15 +1471,7 @@ void Device_Set_SimulationData(  WOBJ*           h_WorldOBJ,
 
     cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Set Simulation Data: Dram memory alloc "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Set Simulation Data: Dram memory alloc ");
 
 
     cout<<"INFO-D: Copying Constant Data Device: \n";
@@ -1717,15 +1519,7 @@ void Device_Set_SimulationData(  WOBJ*           h_WorldOBJ,
 		  cudaMemcpyToSymbol( InitVel,        h_PosConfig->velocity,     sizeof(float3)*2);
 	}
 
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Set Simulation Data: Constant memory alloc "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Set Simulation Data: Constant memory alloc ");
 
 
 	cout<<" GPU Malloc DONE!\n";
@@ -1771,15 +1565,7 @@ void Device_Set_SimulationData(  WOBJ*           h_WorldOBJ,
    }
     cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Set Simulation Data: Set_Init_Config_Device Kernel "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Set Simulation Data: Set_Init_Config_Device Kernel ");
 
     /* Select Initial Position */
 	if(!h_PosConfig->use_file)
@@ -1816,15 +1602,7 @@ void Device_Set_SimulationData(  WOBJ*           h_WorldOBJ,
 
     LogFileD.close();
 
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Set Simulation Data: Error at end: Debug further "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Set Simulation Data: Error at end: Debug further ");
 
 }
 /*-----------------------------------------------------------------------------*/
@@ -1838,15 +1616,7 @@ void Device_Set_SimulationData(  WOBJ*           h_WorldOBJ,
 void Device_DEM_UpdateSim()
 {
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"DEM_UpdateSim: Start "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: Start ");
 
 	/* Dynamically add particles to simulation by updating number of particles
 	 * and changing the downstream kernel launches */
@@ -1901,15 +1671,7 @@ void Device_DEM_UpdateSim()
 
     cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"DEM_UpdateSim: Hash "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: Hash ");
     /*-----------------------------------------------------------------------*/
            /* 2. Sort Particles according to (Grid Hash) */
     /*-----------------------------------------------------------------------*/
@@ -2003,15 +1765,7 @@ void Device_DEM_UpdateSim()
 
     cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"DEM_UpdateSim: Sort "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: Sort ");
     /*-----------------------------------------------------------------------*/
                 /* 4. Update the pos and vel based on sorting in 3. */
       /*-----------------------------------------------------------------------*/
@@ -2034,15 +1788,7 @@ void Device_DEM_UpdateSim()
      cudaDeviceSynchronize();
       /*-----------------------------------------------------------------------*/
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"DEM_UpdateSim: Reorder "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: Reorder ");
 
     /* Free All but NNList  */
     cudaFree(dSortedPos);
@@ -2119,15 +1865,7 @@ void Device_DEM_UpdateSim()
     cudaDeviceSynchronize();
     /*-----------------------------------------------------------------------*/
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	cout<<"DEM_UpdateSim: BinData "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: BinData ");
 
 
 
@@ -2161,15 +1899,7 @@ void Device_DEM_UpdateSim()
     		             ( m_dCellStart,m_dCellEnd,dBroad_List,dNumNN,dram_position_com,dram_ObjectType,dram_P_ID,NUMPARTICLES_Current);
       cudaDeviceSynchronize();
 
- 	 if(error_check==1)
- 	 {
- 	    	cudaError_t errormsg=cudaGetLastError();
- 	    	if(errormsg>0)
- 	    	{
- 	    	cout<<"DEM_UpdateSim: NN Search NonSymm "<<cudaGetErrorString(errormsg)<<endl;
- 	    	 exit(1);
- 	    	}
- 	 }
+ 	 CUDA_CHECK("DEM_UpdateSim: NN Search NonSymm ");
     /*-----------------------------------------------------------------------*/
                        /* 6. Apply Particle Particle Forces */
     /*-----------------------------------------------------------------------*/
@@ -2186,15 +1916,7 @@ void Device_DEM_UpdateSim()
 				  dram_P_ID,force_PP,force_PP_ang,NUMPARTICLES_Current   );
 			cudaDeviceSynchronize();
 
-		 	 if(error_check==1)
-		 	 {
-		 	    	cudaError_t errormsg=cudaGetLastError();
-		 	    	if(errormsg>0)
-		 	    	{
-		 	    	cout<<"DEM_UpdateSim: Force spheres NonSymm "<<cudaGetErrorString(errormsg)<<endl;
-		 	    	 exit(1);
-		 	    	}
-		 	 }
+		 	 CUDA_CHECK("DEM_UpdateSim: Force spheres NonSymm ");
 		  }
       else
       {
@@ -2227,15 +1949,7 @@ void Device_DEM_UpdateSim()
     	  }
 			cudaDeviceSynchronize();
 
-		 	 if(error_check==1)
-		 	 {
-		 	    	cudaError_t errormsg=cudaGetLastError();
-		 	    	if(errormsg>0)
-		 	    	{
-		 	    	 cout<<"DEM_UpdateSim: Force poly NonSymm "<<cudaGetErrorString(errormsg)<<endl;
-		 	    	 exit(1);
-		 	    	}
-		 	 }
+		 	 CUDA_CHECK("DEM_UpdateSim: Force poly NonSymm ");
 
       }
 
@@ -2258,15 +1972,7 @@ void Device_DEM_UpdateSim()
 
 
 
-		 	 if(error_check==1)
-		 	 {
-		 	    	cudaError_t errormsg=cudaGetLastError();
-		 	    	if(errormsg>0)
-		 	    	{
-		 	    	 cout<<"DEM_UpdateSim: NN search Symm "<<cudaGetErrorString(errormsg)<<endl;
-		 	    	 exit(1);
-		 	    	}
-		 	 }
+		 	 CUDA_CHECK("DEM_UpdateSim: NN search Symm ");
 
 
 
@@ -2286,15 +1992,7 @@ void Device_DEM_UpdateSim()
 
 				cudaDeviceSynchronize();
 
-			 	 if(error_check==1)
-			 	 {
-			 	    	cudaError_t errormsg=cudaGetLastError();
-			 	    	if(errormsg>0)
-			 	    	{
-			 	    	cout<<"DEM_UpdateSim: Force spheres Symm "<<cudaGetErrorString(errormsg)<<endl;
-			 	    	 exit(1);
-			 	    	}
-			 	 }
+			 	 CUDA_CHECK("DEM_UpdateSim: Force spheres Symm ");
 
 
 		}
@@ -2312,15 +2010,7 @@ void Device_DEM_UpdateSim()
 		          dram_P_ID,NUMPARTICLES_Current);
 			cudaDeviceSynchronize();
 
-		 	 if(error_check==1)
-		 	 {
-		 	    	cudaError_t errormsg=cudaGetLastError();
-		 	    	if(errormsg>0)
-		 	    	{
-		 	    	cout<<"DEM_UpdateSim: Force poly Symm "<<cudaGetErrorString(errormsg)<<endl;
-		 	    	 exit(1);
-		 	    	}
-		 	 }
+		 	 CUDA_CHECK("DEM_UpdateSim: Force poly Symm ");
 
 		}
    }
@@ -2340,15 +2030,7 @@ void Device_DEM_UpdateSim()
 	             dram_ObjectType, dram_P_ID,NUMPARTICLES_Current);
 	   cudaDeviceSynchronize();
 
-	 	 if(error_check==1)
-	 	 {
-	 	    	cudaError_t errormsg=cudaGetLastError();
-	 	    	if(errormsg>0)
-	 	    	{
-	 	    	 cout<<"DEM_UpdateSim: Lifter Inter "<<cudaGetErrorString(errormsg)<<endl;
-	 	    	 exit(1);
-	 	    	}
-	 	 }
+	 	 CUDA_CHECK("DEM_UpdateSim: Lifter Inter ");
     }
 
 
@@ -2365,15 +2047,7 @@ void Device_DEM_UpdateSim()
                                                                                     dram_P_ID,NUMPARTICLES_Current                   );
 	cudaDeviceSynchronize();
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	 cout<<"DEM_UpdateSim: Surface Interaction "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: Surface Interaction ");
 
   if(SimInfo_C->use_symmetry)
   {
@@ -2388,15 +2062,7 @@ void Device_DEM_UpdateSim()
               dram_ObjectType, dram_P_ID,NUMPARTICLES_Current );
       cudaDeviceSynchronize();
 
-	 	 if(error_check==1)
-	 	 {
-	 	    	cudaError_t errormsg=cudaGetLastError();
-	 	    	if(errormsg>0)
-	 	    	{
-	 	    	 cout<<"DEM_UpdateSim: Integration Euler Symm "<<cudaGetErrorString(errormsg)<<endl;
-	 	    	 exit(1);
-	 	    	}
-	 	 }
+	 	 CUDA_CHECK("DEM_UpdateSim: Integration Euler Symm ");
 
   }
   else /* Non symmetry*/
@@ -2414,15 +2080,7 @@ void Device_DEM_UpdateSim()
               dram_ObjectType, dram_P_ID,NUMPARTICLES_Current );
       cudaDeviceSynchronize();
 
-	 	 if(error_check==1)
-	 	 {
-	 	    	cudaError_t errormsg=cudaGetLastError();
-	 	    	if(errormsg>0)
-	 	    	{
-	 	    	 cout<<"DEM_UpdateSim: Integration Euler Non Symm "<<cudaGetErrorString(errormsg)<<endl;
-	 	    	 exit(1);
-	 	    	}
-	 	 }
+	 	 CUDA_CHECK("DEM_UpdateSim: Integration Euler Non Symm ");
     }
     else
     {
@@ -2449,30 +2107,14 @@ void Device_DEM_UpdateSim()
     	      cudaDeviceSynchronize();
     }
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	 cout<<"DEM_UpdateSim: Verlet NonSymm "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: Verlet NonSymm ");
 
   }
 
   cudaFree(dBroad_List);
   cudaFree(dNumNN);
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	 cout<<"DEM_UpdateSim: END "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: END ");
 
 	 /* Flags particles to be removed from the sim
 	  * and gives them a position such that the hash will be large */
@@ -2511,15 +2153,7 @@ void Device_DEM_UpdateSim()
        }
      }
 
-	 if(error_check==1)
-	 {
-	    	cudaError_t errormsg=cudaGetLastError();
-	    	if(errormsg>0)
-	    	{
-	    	 cout<<"DEM_UpdateSim: KillParticles "<<cudaGetErrorString(errormsg)<<endl;
-	    	 exit(1);
-	    	}
-	 }
+	 CUDA_CHECK("DEM_UpdateSim: KillParticles ");
 
 	 Call_Time+=SimInfo_C->InitalDelta_t;
 
@@ -2544,15 +2178,7 @@ void Device_Get_P_Positions( float3 *Pos, Quaterion *Quart_ornt,uint *PType,
 
 	if( NUMPARTICLES_Current > 0 )
 	{
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Get Positions : Error Start "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Get Positions : Error Start ");
 
 
 
@@ -2599,15 +2225,7 @@ void Device_Get_P_Positions( float3 *Pos, Quaterion *Quart_ornt,uint *PType,
     cudaFree( d_ptype );
     cudaFree( d_PID );
 
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Get Positions : Error End "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Get Positions : Error End ");
 	}
 	else /* Start up during filling */
 	{
@@ -2706,15 +2324,7 @@ void Device_Get_P_Velocity( float3 *H_Vel, float3 *H_Rvel, int Flag,
                             uint *h_ptype, int *h_pid                )
 {
 
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Get Velocity : Error Start "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Get Velocity : Error Start ");
 
 	float3 *d_vel;
 	float3 *d_velR;
@@ -2764,15 +2374,7 @@ void Device_Get_P_Velocity( float3 *H_Vel, float3 *H_Rvel, int Flag,
       cudaFree( d_velR );
     }
 
-	 if(error_check==1)
-	 {
-		cudaError_t errormsg=cudaGetLastError();
-		if(errormsg>0)
-		{
-		 cout<<"Get Velocity : Error End "<<cudaGetErrorString(errormsg)<<endl;
-		 exit(1);
-		}
-	 }
+	 CUDA_CHECK("Get Velocity : Error End ");
 }
 
 
@@ -2820,15 +2422,7 @@ void Device_Get_Energy(float *Energy)
     cudaDeviceSynchronize();
     cudaFree( d_energy );
 
-    if(error_check==1)
-    {
-    	cudaError_t errormsg=cudaGetLastError();
-    	 if(errormsg>0)
-    	 {
-    	   cout<<"Get Energy: "<<cudaGetErrorString(errormsg)<<endl;
-    	   exit(1);
-    	 }
-    }
+    CUDA_CHECK("Get Energy: ");
 }
 
 

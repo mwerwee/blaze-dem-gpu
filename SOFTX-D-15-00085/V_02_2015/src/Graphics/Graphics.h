@@ -612,7 +612,7 @@ void Draw_WorldGeometry()
     	 /* Draw caps */
     	  glColor3f(0.2f,0.07f,0.06f);
     	    glPushMatrix();
-    	      GLUquadricObj *capb=NULL;
+    	      GLUquadricObj *capb=nullptr;
     	      capb = gluNewQuadric();
     	      glTranslatef(m_KWorldObject[0].cyl_geo.center_bot_cap.x, m_KWorldObject[0].cyl_geo.center_bot_cap.y,
     	     		    	    		                                m_KWorldObject[0].cyl_geo.center_bot_cap.z );
@@ -622,7 +622,7 @@ void Draw_WorldGeometry()
 
     	    glColor3f(0.2f,0.07f,0.06f);
       	    glPushMatrix();
-      	      GLUquadricObj *capt=NULL;
+      	      GLUquadricObj *capt=nullptr;
       	      capt = gluNewQuadric();
       	      glTranslatef(m_KWorldObject[0].cyl_geo.center_top_cap.x, m_KWorldObject[0].cyl_geo.center_top_cap.y,
       	     		    	    		                                m_KWorldObject[0].cyl_geo.center_top_cap.z );
@@ -633,7 +633,7 @@ void Draw_WorldGeometry()
 
       	  glColor3f(0.2f,0.07f,0.06f);
     	  glPushMatrix();
-    		GLUquadricObj *cyl=NULL;
+    		GLUquadricObj *cyl=nullptr;
     		cyl = gluNewQuadric();
     	    glTranslatef(m_KWorldObject[0].cyl_geo.center_bot_cap.x, m_KWorldObject[0].cyl_geo.center_bot_cap.y,
     	    		                                                 m_KWorldObject[0].cyl_geo.center_bot_cap.z);
@@ -648,7 +648,7 @@ void Draw_WorldGeometry()
     	  /* Dummy outside cylinder */
       	  glColor3f(0.2f,0.07f,0.06f);
     	  glPushMatrix();
-    		GLUquadricObj *cylo=NULL;
+    		GLUquadricObj *cylo=nullptr;
     		cylo = gluNewQuadric();
     	    glTranslatef(m_KWorldObject[0].cyl_geo.center_bot_cap.x, m_KWorldObject[0].cyl_geo.center_bot_cap.y,
     	    		                                                 m_KWorldObject[0].cyl_geo.center_bot_cap.z);
@@ -694,7 +694,7 @@ void Draw_WorldGeometry()
 
    	  glColor3f(0.2f,0.07f,0.06f);
  	  glPushMatrix();
- 		GLUquadricObj *cyl=NULL;
+ 		GLUquadricObj *cyl=nullptr;
  		cyl = gluNewQuadric();
  	    glTranslatef(m_KWorldObject[0].cyl_geo.center_bot_cap.x, m_KWorldObject[0].cyl_geo.center_bot_cap.y,
  	    		                                                 0.0);
@@ -901,7 +901,7 @@ void Draw_DynamicGeometry()
 
  	  glColor3f(0.2f,0.07f,0.06f);
 	  glPushMatrix();
-		GLUquadricObj *cyl=NULL;
+		GLUquadricObj *cyl=nullptr;
 		cyl = gluNewQuadric();
 	    glTranslatef(m_KDynamicObject[i].COM.x, m_KDynamicObject[i].COM.y,
 	    		m_KDynamicObject[i].COM.z);

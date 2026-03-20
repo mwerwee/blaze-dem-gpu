@@ -14,6 +14,17 @@
 
 using namespace std;
 
+/*---------------------------------------------------------------------------*/
+/*                      Named constants for array sizes                      */
+/*---------------------------------------------------------------------------*/
+static const int MAX_PARTICLE_TYPES = 16;
+static const int MAX_VERTICES       = 32;
+static const int MAX_EDGES          = 32;
+static const int MAX_FACES          = 32;
+static const int MAX_SURFACES       = 16;
+static const int MAX_WORLD_SURFACES = 16;
+static const int MAX_PP_INTERACTIONS = 6;
+
 
 struct __align__(16) Contact_Info
 {
@@ -29,7 +40,7 @@ struct __align__(16) Contact_InfoPP
 
 struct  Contact_InfoPP2
 {
-    uint    obj_id      [32];
+    uint    obj_id      [MAX_VERTICES];
 //    int8_t  cont_type   [32];
 //    int8_t  contact_face[32];
 //    int8_t AorB        [32];
@@ -160,7 +171,7 @@ struct InitConfig
    int3   num;
    float3 space;
    float3 start;
-   float3 p_size[16];
+   float3 p_size[MAX_PARTICLE_TYPES];
    bool   is_spheres;
    bool   use_file;
    int    grid_type;
@@ -278,16 +289,16 @@ struct POBJ
 	 * check how to exclude with c++                 */
 	float3   COM;
 	int      num_vertex;
-	float3   Local_Vertex [32];/* Rotate on GPU*/
+	float3   Local_Vertex [MAX_VERTICES];/* Rotate on GPU*/
 	int      num_edges;
-	Edge_Def edge         [32];
+	Edge_Def edge         [MAX_EDGES];
 	int      num_faces;
-	Surface  face         [32];
+	Surface  face         [MAX_FACES];
 	float    InertiaT     [9]; /* Row of T*/
-	float3   vertex       [32];
+	float3   vertex       [MAX_VERTICES];
 
 	/* Particle Interaction */
-	PP_Parms  PP[6];
+	PP_Parms  PP[MAX_PP_INTERACTIONS];
 
 	/* Surface Interaction */
 	float surface_Kn;           /* Spring   Normal     */
@@ -371,9 +382,9 @@ struct WOBJ
 {
   SurfaceType surface_type;
   int         num_surfaces;
-  Surface     surfaces    [16];
+  Surface     surfaces    [MAX_WORLD_SURFACES];
   int         num_vertex;
-  float3      vertex      [16];
+  float3      vertex      [MAX_WORLD_SURFACES];
   bool        is_rotating;
 
   /* MACRO surface */
@@ -398,8 +409,8 @@ struct Descp_WorldOBJ
 /* String description */
 struct Descp_ParticleOBJ
 {
-  string name  [16];
-  string descp [16];
+  string name  [MAX_PARTICLE_TYPES];
+  string descp [MAX_PARTICLE_TYPES];
 };
 
 

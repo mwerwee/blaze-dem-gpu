@@ -16,7 +16,7 @@
 #include <cmath>
 #include "../DataStructures/Quart.h"
 #include "../DataStructures/Host_Helpers.h"
-#include "../Utilities/Host/Operators.h"
+#include "../Utilities/Operators.h"
 
 
 
