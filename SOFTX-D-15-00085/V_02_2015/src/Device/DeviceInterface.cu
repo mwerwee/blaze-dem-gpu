@@ -113,6 +113,21 @@ Contact_Info *dram_Lifter_Contact_Hist;
 Contact_InfoPP *dram_PP_Contact_Hist;
 int            *dram_PP_Contact_Num;
 
+/* Pre-allocated sort scratch buffers — reused every timestep in Device_DEM_UpdateSim */
+float3         *dSortedPos;
+float3         *dSortedVel;
+float3         *dSortedAcc;
+float3         *dSortedVelQ;
+uint           *dSortedPType;
+int            *dSortedPID;
+Contact_Info   *dSortedLifter_Contact_Hist;
+Quaterion      *dSortedPosQ;             /* allocated if particle_type==1 || sphere_orient */
+float3         *dSortedPosOld;           /* allocated if Integration_Type==1 */
+Contact_InfoPP *dSorted_PP_Contact_Hist; /* allocated if use_hist */
+int            *dSorted_PP_Contact_Num;  /* allocated if use_hist */
+uint           *dBroad_List;             /* broad-phase neighbour list (N*32) */
+uint           *dNumNN;                  /* neighbour count per particle */
+
 
 #include "Utilities.cuh"
 /*                        DEM Kernels for Polyhedra                          */
@@ -1451,6 +1466,25 @@ void Device_Set_SimulationData(  WOBJ*           h_WorldOBJ,
        cudaMalloc( (void**) &dram_PP_Contact_Num, sizeof(int)*NUMPARTICLES_MAX_SIM );
     }
 
+    /* Pre-allocate sort scratch buffers (reused every timestep, no malloc/free per frame) */
+    cudaMalloc( (void**) &dSortedPos  , sizeof(float3)        *NUMPARTICLES_MAX_SIM );
+    cudaMalloc( (void**) &dSortedVel  , sizeof(float3)        *NUMPARTICLES_MAX_SIM );
+    cudaMalloc( (void**) &dSortedAcc  , sizeof(float3)        *NUMPARTICLES_MAX_SIM );
+    cudaMalloc( (void**) &dSortedVelQ , sizeof(float3)        *NUMPARTICLES_MAX_SIM );
+    cudaMalloc( (void**) &dSortedPType, sizeof(uint)          *NUMPARTICLES_MAX_SIM );
+    cudaMalloc( (void**) &dSortedPID  , sizeof(int)           *NUMPARTICLES_MAX_SIM );
+    cudaMalloc( (void**) &dSortedLifter_Contact_Hist, sizeof(Contact_Info)*NUMPARTICLES_MAX_SIM );
+    if(SimInfo_C->particle_type==1 || SimInfo_C->sphere_orient)
+        cudaMalloc( (void**) &dSortedPosQ , sizeof(Quaterion)*NUMPARTICLES_MAX_SIM );
+    if(SimInfo_C->Integration_Type==1)
+        cudaMalloc( (void**) &dSortedPosOld, sizeof(float3)  *NUMPARTICLES_MAX_SIM );
+    if(SimInfo_C->use_hist) {
+        cudaMalloc( (void**) &dSorted_PP_Contact_Hist, sizeof(Contact_InfoPP)*NUMPARTICLES_MAX_SIM*32 );
+        cudaMalloc( (void**) &dSorted_PP_Contact_Num , sizeof(int)           *NUMPARTICLES_MAX_SIM    );
+    }
+    cudaMalloc( (void**) &dBroad_List, sizeof(uint)*NUMPARTICLES_MAX_SIM*32 );
+    cudaMalloc( (void**) &dNumNN     , sizeof(uint)*NUMPARTICLES_MAX_SIM    );
+
 	float Tallys [6];
 
 	for(int i=0;i<6;i++)
@@ -1681,51 +1715,7 @@ void Device_DEM_UpdateSim()
     cudaDeviceSynchronize();
     /*-----------------------------------------------------------------------*/
 
-    /* Reorder arrays based on hash */
-    float3    *dSortedPos;
-    float3    *dSortedVel;
-    float3    *dSortedAcc;
-    uint      *dSortedPType;
-    int       *dSortedPID;
-
-    Contact_Info    *dSortedLifter_Contact_Hist;
-
-    Contact_InfoPP  *dSorted_PP_Contact_Hist;
-    int             *dSorted_PP_Contact_Num;
-
-    Quaterion *dSortedPosQ;
-    float3    *dSortedVelQ;
-
-
-    /* Old particle positions for VV */
-    float3    *dSortedPosOld;
-    if( SimInfo_C->Integration_Type==1 )
-    {
-        cudaMalloc( (void**) &dSortedPosOld  , sizeof(float3)   *NUMPARTICLES_Current );     /* 120MB */
-    }
-
-                 /* Allocation of PDA data */
-    cudaMalloc( (void**) &dSortedPos  , sizeof(float3)   *NUMPARTICLES_Current );     /* 120MB */
-    cudaMalloc( (void**) &dSortedVel  , sizeof(float3)   *NUMPARTICLES_Current );     /* 120MB */
-    cudaMalloc( (void**) &dSortedAcc  , sizeof(float3)   *NUMPARTICLES_Current );     /* 120MB */
-
-    if(SimInfo_C->particle_type==1 || SimInfo_C->sphere_orient)
-	{
-      cudaMalloc( (void**) &dSortedPosQ , sizeof(Quaterion)*NUMPARTICLES_Current ); /* 160MB */
-	}
-
-    cudaMalloc( (void**) &dSortedVelQ , sizeof(float3)   *NUMPARTICLES_Current );    /* 120MB */
-    cudaMalloc( (void**) &dSortedPType, sizeof(uint)     *NUMPARTICLES_Current );        /* 12MB */
-    cudaMalloc( (void**) &dSortedPID  , sizeof(int)      *NUMPARTICLES_Current );        /* 12MB */
-
-    cudaMalloc( (void**) &dSortedLifter_Contact_Hist     , sizeof(Contact_Info)*NUMPARTICLES_Current );
-
-
-    if(SimInfo_C->use_hist)
-    {
-     cudaMalloc( (void**) &dSorted_PP_Contact_Hist     , sizeof(Contact_InfoPP)*NUMPARTICLES_Current*32 );
-     cudaMalloc( (void**) &dSorted_PP_Contact_Num     , sizeof(int)*NUMPARTICLES_Current );
-    }
+    /* Reorder arrays based on hash — using pre-allocated scratch buffers */
 
     cudaDeviceSynchronize();
 
@@ -1790,31 +1780,6 @@ void Device_DEM_UpdateSim()
 
 	 CUDA_CHECK("DEM_UpdateSim: Reorder ");
 
-    /* Free All but NNList  */
-    cudaFree(dSortedPos);
-    cudaFree(dSortedVel);
-    cudaFree(dSortedAcc);
-
-	if(SimInfo_C->particle_type==1 || SimInfo_C->sphere_orient)
-	{
-      cudaFree(dSortedPosQ);
-	}
-	if(SimInfo_C->Integration_Type==1)
-	{
-      cudaFree(dSortedPosOld);
-	}
-
-    cudaFree(dSortedVelQ);
-    cudaFree(dSortedPType);
-    cudaFree(dSortedPID);
-    cudaFree(dSortedLifter_Contact_Hist);
-
-    if(SimInfo_C->use_hist)
-    {
-          cudaFree(dSorted_PP_Contact_Hist);
-          cudaFree(dSorted_PP_Contact_Num);
-     }
-
    // printf(" %f   \n", Call_Time);
 
 	/* Remove flagged particles from the sim */
@@ -1873,17 +1838,7 @@ void Device_DEM_UpdateSim()
 
 
 
- uint  *dBroad_List;
- uint  *dNumNN;
  cudaDeviceSynchronize();
-
- /* Single code */
- if( !Device_use_multi_gpu )
- {
-
-	  cudaMalloc( (void**) &dBroad_List, sizeof(uint)*NUMPARTICLES_Current*32 );
-	  cudaMalloc( (void**) &dNumNN     , sizeof(uint)*NUMPARTICLES_Current    );
-  }
 
  cudaDeviceSynchronize();
 
@@ -2110,9 +2065,6 @@ void Device_DEM_UpdateSim()
 	 CUDA_CHECK("DEM_UpdateSim: Verlet NonSymm ");
 
   }
-
-  cudaFree(dBroad_List);
-  cudaFree(dNumNN);
 
 	 CUDA_CHECK("DEM_UpdateSim: END ");
 
@@ -2572,6 +2524,25 @@ void Device_Clean()
     {
 
     }
+
+    /* Free pre-allocated sort scratch buffers */
+    cudaFree(dSortedPos);
+    cudaFree(dSortedVel);
+    cudaFree(dSortedAcc);
+    cudaFree(dSortedVelQ);
+    cudaFree(dSortedPType);
+    cudaFree(dSortedPID);
+    cudaFree(dSortedLifter_Contact_Hist);
+    if(SimInfo_C->particle_type==1 || SimInfo_C->sphere_orient)
+        cudaFree(dSortedPosQ);
+    if(SimInfo_C->Integration_Type==1)
+        cudaFree(dSortedPosOld);
+    if(SimInfo_C->use_hist) {
+        cudaFree(dSorted_PP_Contact_Hist);
+        cudaFree(dSorted_PP_Contact_Num);
+    }
+    cudaFree(dBroad_List);
+    cudaFree(dNumNN);
 
 
 	cudaDeviceReset();
