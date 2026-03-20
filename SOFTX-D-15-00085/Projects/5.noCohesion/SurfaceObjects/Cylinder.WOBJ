@@ -1,0 +1,17 @@
+Title: "Cylinder"
+Descp: "Vertical_cylinder_with_caps"
+
+Geometry-Specfications
+
+NUM_VERTEX: 0
+
+NUM_SURFACES: 1
+
+-1 "Barrel"
+Diameter: 10.000000
+Height:   15.000000
+Top:      true
+Bot:      true
+normalT:  0.0 0.0 -1.0
+normalB:  0.0 0.0  1.0
+Offset:   -5.000000 -5.000000 0.000000

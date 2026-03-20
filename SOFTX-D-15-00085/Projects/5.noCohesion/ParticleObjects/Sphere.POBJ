@@ -1,0 +1,33 @@
+Title: "Sphere"
+Descp: "Generated_by_liggghts_to_blazedem"
+
+Geometry_Specfications 
+
+Diameter: 0.300000
+Density:  0.00250000
+
+
+Particle_Particle
+
+COR:              0.9000
+Kn(N/cm):         1.4019
+Static_Friction:  0.0500
+Kinetic_Friction: 0.0500
+
+
+Particle_Surface
+
+COR:              0.9000
+Kn(N/cm):         2.8038
+Static_Friction:  0.0500
+Kinetic_Friction: 0.0500
+
+
+Particle_Lifter
+
+COR:              0.9000
+Kn(N/cm):         2.8038
+Static_Friction:  0.0500
+Kinetic_Friction: 0.0500
+
+

@@ -1,0 +1,97 @@
+Title: "noCohesion"
+ModelType(Specfic|0:TC_COR|1:KN_COR):     1
+Simulation_Type(0=General,1=mill,2=silo): 0
+Particle_Type(0=sphere,1=poly,2=mixed):   0
+Delta_t(s):       1.00E-05
+
+_________________________________________________
+             1_Geometrical-Information
+
+
+---------------------------------------
+ 1.1_Surface_Objects_(index__name)
+---------------------------------------
+Number: 1
+
+1 Cylinder
+
+---------------------------------------
+ 1.2_Particle_Objects_(index__name__number)
+---------------------------------------
+Number: 1
+
+1 Sphere 250
+
+---------------------------------------
+ 1.3_Volume_Objects_(index__name)
+---------------------------------------
+
+Number: 0 Repeat: 0
+
+_________________________________________________
+
+
+
+_________________________________________________
+             2_Simulation_Setup
+
+Num_Particles:    250
+ForceField(cm/s): 0.000000  0.000000  -981.000000
+
+---------------------------------------------
+Rotation:         1
+RollRes:          0.000
+GlobalDamp:       1.0
+VelLimit:         0.000
+_________________________________________________
+
+
+
+_________________________________________________
+            3_Spatial-Grid-Computation
+
+Origin:       -5.3000   -5.3000  -0.3000
+World_Size:   10.6000  10.6000  15.6000
+Cell_Size:    0.6000  0.6000  0.6000
+_________________________________________________
+
+
+_________________________________________________
+            4_Inital_Particle-Setup
+
+Read_FromFile: 0
+GridType(1=ran): 0
+GridSize(X,Y,Z): 5  5  10
+Start(X,Y,Z):    -0.6750  -0.6750  0.4800
+Space:           0.3300  0.3300  0.3300
+Velocity:        0.0000  0.0000  0.0000
+
+
+_________________________________________________
+
+
+
+_________________________________________________
+             5_Output_Options
+
+Display:           1 1 0.50
+View:              0
+FPS:               30
+GL_DEBUG           0
+File_write(0=none) 1000
+total_Time:        0.5000
+time_limit:        0
+energy_diss:       1000
+wall_forces:       0
+_______________________________________________
+
+
+_________________________________________________
+          6_Simulation_Specfic_Options
+
+Hatch_mode:        0
+Flow_counter:      0
+kill_after:        0
+_________________________________________________
+
+#END OF INPUT
