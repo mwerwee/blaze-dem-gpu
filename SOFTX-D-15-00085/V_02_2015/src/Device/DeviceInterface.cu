@@ -1674,6 +1674,19 @@ void Device_Set_SimulationData(  WOBJ*           h_WorldOBJ,
 
     cout<<"INFO-D: Copying Constant Data Device: \n";
 
+	/* Verify constant memory usage fits 64KB limit */
+	{
+		size_t const_total = sizeof(SimulationInfo)
+		                   + sizeof(WOBJ) * h_Num_WorldOBJ
+		                   + sizeof(POBJ) * h_SimInfo->Num_ParticleObjects
+		                   + sizeof(DOBJ) * h_Num_DynamicOBJ;
+		printf("INFO-D: Constant memory usage: %zu bytes (limit 65536)\n", const_total);
+		if (const_total > 65536) {
+			printf("ERROR: Constant memory exceeds 64KB limit!\n");
+			exit(1);
+		}
+	}
+
 	/* 1) Copy Objects to Device */
 	cudaMemcpyToSymbol( SimParms,       h_SimInfo,     sizeof( SimulationInfo ) );
 	cudaMemcpyToSymbol( WorldObject,    h_WorldOBJ,    sizeof(WOBJ)*h_Num_WorldOBJ );
