@@ -1139,7 +1139,7 @@ int main(int argc, char **argv)
 				 CreateEnvironment();
 		 }
 
-	     Gl_bPause            = true;
+	     Gl_bPause            = false; /* auto-start: was true (required spacebar) */
 
 
 	   cout<<"Usage: 'space' is to start/stop simulation|  'p' is to dump system state | 'q' exits "<<endl;

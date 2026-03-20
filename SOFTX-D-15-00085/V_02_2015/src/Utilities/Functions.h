@@ -20,10 +20,13 @@
 /* Core vector functions (host and device)                                   */
 /*---------------------------------------------------------------------------*/
 
-static inline HD float3 make_float3(float x, float y, float z)
+#ifndef __CUDACC__
+/* CUDA runtime already provides make_float3 for device code */
+static inline float3 make_float3(float x, float y, float z)
 {
     float3 t; t.x = x; t.y = y; t.z = z; return t;
 }
+#endif
 
 inline HD float dot(float3 a, float3 b)
 {
@@ -287,18 +290,18 @@ inline __device__ float length(float4 v)
 
 inline __device__ float2 normalize(float2 v)
 {
-    float invLen = rsqrtf(dot(v, v));
-    return v * invLen;
+    float invLen = rsqrtf(v.x*v.x + v.y*v.y);
+    return make_float2(v.x * invLen, v.y * invLen);
 }
 inline __device__ float3 normalize(float3 v)
 {
     float invLen = rsqrtf(dot(v, v));
-    return v * invLen;
+    return make_float3(v.x * invLen, v.y * invLen, v.z * invLen);
 }
 inline __device__ float4 normalize(float4 v)
 {
-    float invLen = rsqrtf(dot(v, v));
-    return v * invLen;
+    float invLen = rsqrtf(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
+    return make_float4(v.x * invLen, v.y * invLen, v.z * invLen, v.w * invLen);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -391,7 +394,8 @@ inline __device__ int4 abs(int4 v)
 
 inline __device__ float3 reflect(float3 i, float3 n)
 {
-    return i - 2.0f * n * dot(n,i);
+    float d = 2.0f * dot(n, i);
+    return make_float3(i.x - d*n.x, i.y - d*n.y, i.z - d*n.z);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
