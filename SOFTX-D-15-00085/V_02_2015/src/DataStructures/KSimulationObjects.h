@@ -15,13 +15,13 @@
 using namespace std;
 
 
-struct __builtin_align__(16) Contact_Info
+struct __align__(16) Contact_Info
 {
     int num_contact, obj_id, snum, cont_type;
 };
 
 
-struct __builtin_align__(16) Contact_InfoPP
+struct __align__(16) Contact_InfoPP
 {
     int obj_id, cont_type, contact_face, AorB;
 };

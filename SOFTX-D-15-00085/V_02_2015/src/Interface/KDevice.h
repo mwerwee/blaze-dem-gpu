@@ -8,7 +8,6 @@
 
 #ifndef KDEVICE_H_
 #define KDEVICE_H_
-typedef unsigned int uint;
 #include "../DataStructures/KSimulationObjects.h"
 #include "../Device/DeviceInterface.h"
 

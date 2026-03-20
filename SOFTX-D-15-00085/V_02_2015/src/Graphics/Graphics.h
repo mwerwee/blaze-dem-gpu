@@ -8,7 +8,7 @@
 
 #include <GL/freeglut.h>
 
-#include <math.h>
+#include <cmath>
 #include <string>
 
 

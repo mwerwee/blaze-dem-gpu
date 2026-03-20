@@ -9,7 +9,10 @@
 #define TYPES_H_
 
 
+#ifndef _UINT_TYPEDEF_
+#define _UINT_TYPEDEF_
 typedef unsigned int uint;
+#endif
 typedef unsigned short ushort;
 
 struct  Quaterion

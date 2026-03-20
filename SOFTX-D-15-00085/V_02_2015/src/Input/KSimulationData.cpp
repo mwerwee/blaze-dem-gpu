@@ -13,7 +13,7 @@
 #include "KSimulationData.h"
 
 #include <vector_types.h>
-#include <math.h>
+#include <cmath>
 #include "../DataStructures/Quart.h"
 #include "../DataStructures/Host_Helpers.h"
 #include "../Utilities/Host/Operators.h"

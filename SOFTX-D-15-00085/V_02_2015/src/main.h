@@ -39,7 +39,7 @@
 /*---------------------------------------------------------------------------*/
                      /* System C++ */
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <sstream>
 
 

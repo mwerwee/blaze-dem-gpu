@@ -3,7 +3,7 @@
 #include <fstream>
 #include "Graphics/Graphics.h"
 
-#include <time.h>
+#include <ctime>
 
 
 

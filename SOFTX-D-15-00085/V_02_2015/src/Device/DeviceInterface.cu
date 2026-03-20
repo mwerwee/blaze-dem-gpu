@@ -7,11 +7,11 @@
 /*---------------------------------------------------------------------------*/
 
                        /* System C++ */
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+#include <cassert>
 #include <iostream>
 #include <fstream>
 

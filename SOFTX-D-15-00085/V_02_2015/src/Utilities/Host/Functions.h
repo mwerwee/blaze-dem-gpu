@@ -8,7 +8,7 @@
 #ifndef FUNCTIONS_H_
 #define FUNCTIONS_H_
 
-#include <math.h>
+#include <cmath>
 
 /*---------------------------------------------------------------------------*/
  static inline float3 make_float3(float x, float y, float z)
