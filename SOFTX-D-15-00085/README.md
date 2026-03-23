@@ -1,3 +1,7 @@
+> **Note:** This folder contains code derived from the original [Blaze-DEM](https://github.com/ElsevierSoftwareX/SOFTX-D-15-00085) repository, modified for CUDA 12.x compatibility. The build instructions below are from the original and are outdated — see the [root README](../README.md) for current build and usage instructions.
+
+---
+
 # blazedemGPU
 GPU based discrete element framework (spheres and polyhedra (experimential))
 ============================================================================

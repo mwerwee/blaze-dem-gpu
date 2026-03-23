@@ -59,7 +59,7 @@ Results are written to `SOFTX-D-15-00085/Results/<PROJECTFOLDER>/<WORLDFILENAME>
 
 ## Original source
 
-The source code is based on the upstream Blaze-DEM repository at https://github.com/ElsevierSoftwareX/SOFTX-D-15-00085 and has been modified for CUDA 12 compatibility. If you use this software, please cite the original authors' work as required by the license:
+The source code under `SOFTX-D-15-00085/` is derived from the upstream Blaze-DEM repository at https://github.com/ElsevierSoftwareX/SOFTX-D-15-00085 and has been modified for CUDA 12 compatibility. The original (unmodified) upstream README is preserved at `SOFTX-D-15-00085/README.md`. If you use this software, please cite the original authors' work as required by the license:
 
 - doi:10.1016/j.cam.2013.12.032
 - doi:10.1016/j.amc.2014.10.013
