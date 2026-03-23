@@ -1,0 +1,9 @@
+*.o
+*.d
+Release/
+build/
+.metadata/
+.settings/
+Results/
+Thumbs.db
+.DS_Store

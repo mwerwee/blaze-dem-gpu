@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone:*)",
+      "Bash(xargs wc:*)",
+      "Bash(find \"C:\\\\Users\\\\MErwee\\\\Documents\\\\code_scr\\\\simulation_code\\\\SOFTX-D-15-00085\\\\V_02_2015\\\\src\" -type f \\\\\\( -name \"*.cpp\" -o -name \"*.cu\" \\\\\\) -exec wc -l {} +)"
+    ]
+  }
+}
