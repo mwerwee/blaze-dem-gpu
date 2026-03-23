@@ -4,6 +4,8 @@ A CUDA 12.x port of [Blaze-DEM](https://github.com/ElsevierSoftwareX/SOFTX-D-15-
 
 The original code targeted CUDA 5.5 / Compute 3.0 (Kepler). This fork brings it up to date for modern NVIDIA hardware and toolchains.
 
+> **Use at your own risk!** It took quite a bit of vibe coding to get this running! :) It kind of works.
+
 ## Changes from original
 
 - CUDA 12.x compatibility (sm_50 / sm_70 / sm_80 targets)
