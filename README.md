@@ -26,7 +26,7 @@ The binary is placed in `SOFTX-D-15-00085/build/release/`.
 
 ## Original source
 
-The original Blaze-DEM code is preserved under `SOFTX-D-15-00085/` and is unchanged from the upstream baseline.
+The original Blaze-DEM code is preserved under `SOFTX-D-15-00085/` and is unchanged from the upstream baseline. The upstream repository is at https://github.com/ElsevierSoftwareX/SOFTX-D-15-00085.
 
 If you use this software, please cite the original authors' work as required by the license:
 
