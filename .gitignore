@@ -7,3 +7,4 @@ build/
 Results/
 Thumbs.db
 .DS_Store
+.claude/
